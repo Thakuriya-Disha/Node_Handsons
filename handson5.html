@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+   <head><title>HANDSON 5</title></head>
+   <script src="/socket.io/socket.io.js"></script>
+   <body>
+      <div id="idBox"></div>
+      <br><br>
+      <div id="output"></div>
+      <br><br>
+      <input id="msgBox"></input>
+      <button onclick="sendMessage()">Send</button>
+   </body>
+   <script>
+      var socket = io();
+      const userId = `no-${Math.round(Math.random() * 100)}`;
+      document.getElementById("idBox").innerHTML = userId;
+      
+      let outputObj = document.getElementById("output");
+      let msgBoxObj = document.getElementById("msgBox");
+
+      socket.on('chat_message', (msg) => {
+         outputObj.innerHTML += (msg + "<br>");
+      });
+ 
+      function sendMessage () {
+         const inputMessage = msgBoxObj.value;
+         socket.emit('chat_message', 
+            {
+               userId,
+               msg: inputMessage
+            }
+         );
+         msgBoxObj.value = '';
+      }
+   </script>
+</html>
